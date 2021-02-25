@@ -8,5 +8,10 @@
     <PackageReference Include="System.Data.SqlClient" Version="3.1.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Order.DAL\Order.DAL.csproj" />
+    <ProjectReference Include="..\Order.DTO\Order.DTO.csproj" />
+  </ItemGroup>
+
 
 </Project>
