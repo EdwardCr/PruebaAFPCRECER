@@ -33,5 +33,17 @@ namespace Order.Api.Controllers
 
             
         }
+        [HttpPost]
+
+        public IActionResult Create([FromBody] ClienteDTO cliente){
+            int resultado = clientedb.Registrar(cliente);
+
+            if(resultado!=0){
+                return Ok(new {message="Cliente registrado"});
+            }else{
+                return Ok(new {message = "Client no registrado"});
+            }
+            
+        }
     }
 }

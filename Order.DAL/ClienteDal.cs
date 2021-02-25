@@ -55,7 +55,31 @@ namespace Order.DAL
 
         public int Registrar(ClienteDTO cliente)
         {
-            throw new NotImplementedException();
+            int respuesta = 0;
+
+            try
+            {
+                using (var con = new SqlConnection("Server=localhost;Database=Ordenes;Trusted_Connection=True;MultipleActiveResultSets=true"))
+                {
+                    con.Open();
+
+                    SqlCommand query = new SqlCommand("INSERT INTO Cliente(Nombres, Apellidos,Fecha_nacimiento,telefono, email) VALUES (@p0, @p1, @p2,@p3,@p4)", con);
+
+                    query.Parameters.AddWithValue("@p0", cliente.Nombres);
+                    query.Parameters.AddWithValue("@p1", cliente.Apellidos);
+                    query.Parameters.AddWithValue("@p2", cliente.Fecha_Nacimiento);
+                    query.Parameters.AddWithValue("@p3", cliente.telefono);
+                    query.Parameters.AddWithValue("@p4", cliente.email);
+                    query.ExecuteNonQuery();
+                    respuesta = 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return respuesta;
         }
     }
 }
