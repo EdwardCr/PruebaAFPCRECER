@@ -8,9 +8,34 @@ namespace Order.DAL
 {
     public class ClienteDal : ICliente
     {
-        public ClienteDTO Actualizar()
+        public  int Actualizar(int id,ClienteDTO cliente)
         {
-            throw new NotImplementedException();
+            int respuesta = 0;
+
+            try
+            {
+                using (var con = new SqlConnection("Server=localhost;Database=Ordenes;Trusted_Connection=True;MultipleActiveResultSets=true"))
+                {
+                    con.Open();
+
+                    SqlCommand query = new SqlCommand("UPDATE Cliente SET Nombres=@p0,Apellidos= @p1, Fecha_nacimiento=@p2,telefono=@p3,email=@p4 WHERE ClienteId=@p5", con);
+
+                    query.Parameters.AddWithValue("@p0", cliente.Nombres);
+                    query.Parameters.AddWithValue("@p1", cliente.Apellidos);
+                    query.Parameters.AddWithValue("@p2", cliente.Fecha_Nacimiento);
+                    query.Parameters.AddWithValue("@p3", cliente.telefono);
+                    query.Parameters.AddWithValue("@p4", cliente.email);
+                    query.Parameters.AddWithValue("@p5", id);
+                    query.ExecuteNonQuery();
+                    respuesta = 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return respuesta;
         }
 
         public int Eliminar(int id)

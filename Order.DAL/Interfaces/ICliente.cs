@@ -13,7 +13,7 @@ namespace Order.DAL.Interfaces
     {
         ClienteDTO Obtener(int id);
         int Registrar(ClienteDTO cliente);
-        ClienteDTO Actualizar();
+        int Actualizar(int id,ClienteDTO cliente);
         int Eliminar(int id);
         
     }

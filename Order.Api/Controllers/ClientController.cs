@@ -34,7 +34,6 @@ namespace Order.Api.Controllers
             
         }
         [HttpPost]
-
         public IActionResult Create([FromBody] ClienteDTO cliente){
             int resultado = clientedb.Registrar(cliente);
 
@@ -45,5 +44,18 @@ namespace Order.Api.Controllers
             }
             
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id,[FromBody] ClienteDTO cliente){
+            int resultado = clientedb.Actualizar(id,cliente);
+
+            if(resultado!=0){
+                return Ok(new {message="Cliente actualizado"});
+            }else{
+                return Ok(new {message = "No se pudo actualizar"});
+            }
+            
+        }
+
     }
 }
