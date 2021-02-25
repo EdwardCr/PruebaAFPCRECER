@@ -38,9 +38,28 @@ namespace Order.DAL
             return respuesta;
         }
 
-        public int Eliminar(int id)
+        public bool Eliminar(int id)
         {
-            throw new NotImplementedException();
+            bool respuesta = false;
+
+            try
+            {
+                using (var con = new SqlConnection("Server=localhost;Database=Ordenes;Trusted_Connection=True;MultipleActiveResultSets=true"))
+                {
+                    con.Open();
+
+                    SqlCommand query = new SqlCommand("Delete from Cliente where ClienteId=@p1", con);
+                    query.Parameters.AddWithValue("@p1", id);
+                    query.ExecuteNonQuery();
+                    respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return respuesta;
         }
 
         public ClienteDTO Obtener(int id)

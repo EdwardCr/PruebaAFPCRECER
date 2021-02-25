@@ -57,5 +57,17 @@ namespace Order.Api.Controllers
             
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id){
+            bool resultado = clientedb.Eliminar(id);
+
+            if(resultado){
+                return Ok(new {message="Cliente eliminado"});
+            }else{
+                return Ok(new {message = "Cliente no se pudo eliminar"});
+            }
+            
+        }
+
     }
 }
