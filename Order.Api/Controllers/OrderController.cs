@@ -19,6 +19,15 @@ namespace Order.Api.Controllers
 
         private OrdenDal ordendb =new OrdenDal();
         
+        [HttpGet]
+        public  IActionResult GetAll()
+        {
+           
+            var resultado=ordendb.Todo();
+          
+        return Ok(resultado);            
+        }
+
         [HttpGet("{id}")]
         public  IActionResult Get(int id)
         {

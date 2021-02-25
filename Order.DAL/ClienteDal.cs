@@ -3,6 +3,7 @@ using Order.DAL.Interfaces;
 using Order.DTO;
 using System.Data;
 using System.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace Order.DAL
 {
@@ -124,6 +125,44 @@ namespace Order.DAL
             }
 
             return respuesta;
+        }
+       public List<ClienteDTO> Todo(){
+           List<ClienteDTO> clientes = new List<ClienteDTO>();
+
+            try
+            {
+                using (var con = new SqlConnection("Server=localhost;Database=Ordenes;Trusted_Connection=True;MultipleActiveResultSets=true")) 
+                {
+                    con.Open();
+
+                    var query = new SqlCommand("SELECT * FROM Cliente", con);
+                    using (var dr = query.ExecuteReader()) 
+                    {
+                        while (dr.Read()) 
+                        {
+                            
+                            var usuario =  new ClienteDTO { 
+                                ClienteId = Convert.ToInt32(dr["ClienteId"]),
+                                Nombres = dr["Nombres"].ToString(),
+                                Apellidos = dr["Apellidos"].ToString(),
+                                Fecha_Nacimiento = Convert.ToDateTime(dr["Fecha_nacimiento"]),
+                                telefono=dr["telefono"].ToString(),
+                                email = dr["email"].ToString(),
+                            };
+
+                            
+                            clientes.Add(usuario);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+           return clientes;
         }
     }
 }

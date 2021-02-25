@@ -19,6 +19,16 @@ namespace Order.Api.Controllers
 
         private ClienteDal clientedb =new ClienteDal();
         
+
+          [HttpGet]
+        public  IActionResult GetAll()
+        {
+           
+            var resultado=clientedb.Todo();
+          
+        return Ok(resultado);            
+        }
+
         [HttpGet("{id}")]
         public  IActionResult Get(int id)
         {

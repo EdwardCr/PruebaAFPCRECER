@@ -3,14 +3,84 @@
 <head>
 	<title>Pedidos</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
-<body>
+<body ng-app="app" ng-controller="ctrl">
+	<header>
+  <div class="collapse bg-dark" id="navbarHeader">
+  		EDWARD CRISTIAN CORTEZ
+  </div>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+       
+        <strong>PEDIDOS</strong>
+      </a>
+
+    </div>
+  </div>
+</header>
+<br>
+<br>
 	<div class="container">
 		<div class="row">
 			<div class="col-6">
-				<div>
-					
+				<div class="card">
+					<div class="card-header">
+						Para ordenar un libro por favor realice el registro
+					</div>
+					<div class="card-body">
+				<div class="form-group">
+					<label>Nombre</label>
+					<input type="text" ng-model="cliente.Nombres" class="form-control" name="">
 				</div>
+				<div class="form-group">
+					<label>Apellidos</label>
+					<input type="text" ng-model="cliente.Apellidos" class="form-control" name="">
+				</div>
+				<div class="form-group">
+					<label>Fecha nacimiento</label>
+					<input type="text" ng-model="cliente.Fecha_nacimiento" class="form-control" name="">
+				</div>
+				<div class="form-group">
+					<label>Telefono</label>
+					<input type="text" ng-model="cliente.telefono" class="form-control" name="">
+				</div>
+				<div class="form-group">
+					<label>Correo</label>
+					<input type="text" ng-model="cliente.email" class="form-control" name="">
+				</div>
+				<div class="form-group">
+					<button ng-click="registro()" class="btn btn-success">Registrarme</button>
+				</div>
+				</div>
+				</div>
+			</div>
+			<div class="col-6">
+							<div class="form-group">
+					<select class="form-control" ng-model="categoria" ng-change="cambio()">
+						<option value="">- Seleccione categoria -</option>
+						<option ng-repeat="item in categorias" ng-value="item.nicename">{{item.name}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<ul class="list-group">
+					  <li class="list-group-item" ng-repeat="l in libros">
+					  	<div class="row">
+					  		<div class="col-2">
+					  			<img width="50px" src="{{l.thumbnail}}">
+					  		</div>
+					  		<div class="col-10">
+					  			{{l.title}}
+					  		</div>
+					  			
+					  		</div>
+					  </li>
+					  <li class="list-group-item" ng-if="libros.length==0">...</li>
+					</ul>
+				</div>
+				
+		
 			</div>
 			<div class="col-6">
 				
@@ -21,5 +91,60 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	  var myApp = angular.module('app',[]);
+
+  myApp.controller('ctrl', ['$scope','$http', function($scope,$http) {
+  	$scope.categorias=[]
+  	$scope.libros=[]
+  	$scope.cliente={}
+
+  	$scope.url="https://www.etnassoft.com/api/v1/get/"
+  	$http({
+		  method: 'GET',
+		  url: $scope.url+'?get_categories=all'
+		}).then(function successCallback(response) {
+		   $scope.categorias=response.data
+		  }, function errorCallback(response) {
+		    
+		  });
+
+		$scope.cambio=()=>{
+			 	$http({
+		  method: 'GET',
+		  url: $scope.url+'?category='+$scope.categoria
+			}).then(function successCallback(response) {
+			   $scope.libros=response.data
+			  }, function errorCallback(response) {
+			    
+			  });
+		}
+		$scope.registro=()=>{
+			$scope.cliente.Fecha_nacimiento= new Date($scope.cliente.Fecha_nacimiento)
+			var req = {
+			 method: 'POST',
+			 url: 'https://localhost:5001/client',
+			 headers: {
+			   'Content-Type': "application/json"
+			 },
+			 data: $scope.cliente
+			}
+
+			$http(req).then(function(response){
+				if(response.status==200){
+					alert("Cliente registrado");
+				}
+				$scope.cliente={}
+				
+			}, function(){
+
+			});
+		}
+
+
+
+
+}]);
+</script>
 </body>
 </html>

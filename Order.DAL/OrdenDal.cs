@@ -3,6 +3,7 @@ using Order.DAL.Interfaces;
 using Order.DTO;
 using System.Data;
 using System.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace Order.DAL
 {
@@ -86,7 +87,6 @@ namespace Order.DAL
                             orden.author = dr["author"].ToString();
                             orden.thumbnail = dr["thumbnail"].ToString();
                             orden.url_download = dr["url_download"].ToString();
-                            orden.thumbnail=dr["thumbnail"].ToString();
                             orden.LibroId = dr["LibroId"].ToString();
                         }
                     }
@@ -128,6 +128,45 @@ namespace Order.DAL
             }
 
             return respuesta;
+        }
+        public List<OrdenDTO> Todo(){
+              List<OrdenDTO> ordenes = new List<OrdenDTO>();
+
+            try
+            {
+                using (var con = new SqlConnection("Server=localhost;Database=Ordenes;Trusted_Connection=True;MultipleActiveResultSets=true")) 
+                {
+                    con.Open();
+
+                    var query = new SqlCommand("SELECT * FROM Ordenes", con);
+                    using (var dr = query.ExecuteReader()) 
+                    {
+                        while (dr.Read()) 
+                        {
+                            
+                            var orden =  new OrdenDTO { 
+                            OrdenId = Convert.ToInt32(dr["OrdenId"]),
+                            ClienteId = dr["ClienteId"].ToString(),
+                            title = dr["title"].ToString(),
+                            author = dr["author"].ToString(),
+                            thumbnail = dr["thumbnail"].ToString(),
+                            url_download = dr["url_download"].ToString(),
+                            LibroId = dr["LibroId"].ToString()
+                            };
+
+                            
+                            ordenes.Add(orden);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+           return ordenes;
         }
     }
 }
